@@ -2,12 +2,12 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const PaitentSchema = new mongoose.Schema({
+const PatientSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }
 });
 
-PaitentSchema.methods.isCorrectPassword = function(password, callback){
+PatientSchema.methods.isCorrectPassword = function(password, callback){
   bcrypt.compare(password, this.password, function(err, same) {
     if (err) {
       callback(err);
@@ -17,7 +17,7 @@ PaitentSchema.methods.isCorrectPassword = function(password, callback){
   });
 }
 
-PaitentSchema.pre('save', function(next) {
+PatientSchema.pre('save', function(next) {
   // Check if document is new or a new password has been set
   if (this.isNew || this.isModified('password')) {
     // Saving reference to this because of changing scopes
@@ -36,4 +36,4 @@ PaitentSchema.pre('save', function(next) {
     next();
   }
 });
-module.exports = mongoose.model('Paitent', PaitentSchema);
+module.exports = mongoose.model('Patient', PatientSchema);

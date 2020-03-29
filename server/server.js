@@ -14,7 +14,7 @@ let constants = require('./constants');
 let {isRealString} = require('./utils/validation');
 let {User} = require('./utils/user');
 
-const Paitent = require('./models/Paitent.js');
+const Patient = require('./models/Patient.js');
 const Doctor = require('./models/Doctor.js');
 
 let users = new User();
@@ -55,11 +55,11 @@ app.use(express.static(publicPath));
 app.post('/api/register', function(req, res) {
   console.log("register is hit",req.body)
   const { email, password } = req.body;
-  const paitent = new Paitent({ email, password });
-  paitent.save(function(err) {
+  const patient = new Patient({ email, password });
+  patient.save(function(err) {
     if (err) {
       res.status(500)
-        .send("Error registering new paitent please try again.");
+        .send("Error registering new patient please try again.");
     } else {
       res.status(200).send("Welcome to the club!");
     }
@@ -68,20 +68,20 @@ app.post('/api/register', function(req, res) {
 
 app.post('/api/authenticate', function(req, res) {
   const { email, password } = req.body;
-  Paitent.findOne({ email }, function(err, paitent) {
+  Patient.findOne({ email }, function(err, patient) {
     if (err) {
       console.error(err);
       res.status(500)
         .json({
         error: 'Internal error please try again'
       });
-    } else if (!paitent) {
+    } else if (!patient) {
       res.status(401)
         .json({
           error: 'Incorrect email or password'
         });
     } else {
-      paitent.isCorrectPassword(password, function(err, same) {
+      patient.isCorrectPassword(password, function(err, same) {
         if (err) {
           res.status(500)
             .json({

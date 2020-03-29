@@ -1,13 +1,25 @@
 body {
 	margin: 0;
 	padding: 0;
-	font-family: 'Mukta', sans-serif;
+	font-family: 'Mukta','Roboto',sans-serif;
 	font-size: 1rem;
 	line-height: 1.5;
+	background-color: #F6F8FA;
+}
+
+.container{
+	width: 90%;
+	margin: 0 auto;
+	background-color: white;
+	box-shadow:  0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+	0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+	0 12.5px 10px rgba(0, 0, 0, 0.06),
+	0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+	0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+	0 100px 80px rgba(0, 0, 0, 0.12);
 }
 
 .login-wrapper {
-	background-color: #F6F8FA;
 	height: 100vh;
 	display: flex;
 	justify-content: center;
@@ -15,11 +27,10 @@ body {
 	flex: 1;
 	.form-card {
 		background: white;
-		flex: .25;
     padding: 20px;
     border-radius: 3px;
 		justify-content: center;
-		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+		// box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 		.form-input {
 			padding: 10px 0 10px 0;
 			width: 100%;
@@ -30,4 +41,39 @@ body {
 	color: rgb(0, 153, 255);
   cursor: pointer;
   margin: 0 5px 0 5px;
+}
+
+.form-label{
+	color: rgba(0, 0, 0, 0.61) !important
+}
+
+.btn{
+	text-decoration: none;
+	padding: 8px 40px;
+	border-radius: 4px;
+	font-weight: normal;
+	transition: all 0.2s ease-in-out;
+	cursor: pointer;
+	color: rgba(255, 255, 255, 0.8);
+	margin: 3px 5px 3px 5px;
+}
+
+.button-glow-red{
+	background: linear-gradient(65deg, #FF4D79 0, #FF809F 100%);
+	box-shadow: 0 5px 15px rgba(145, 92, 182, .4);
+}
+
+.button-glow-red:hover{
+	color: rgba(255, 255, 255, 1);
+	box-shadow: 0 5px 25px rgba(145, 92, 182, .4);
+}
+.button-glow-blue{
+
+	background:  linear-gradient(to top right, #0081F6 0, #44A6FF 100%);
+	box-shadow: 0 5px 15px rgba(92, 123, 182, 0.4);
+}
+
+.button-glow-blue:hover{
+	color: rgba(255, 255, 255, 1);
+	box-shadow: 0 5px 25px  rgba(92, 123, 182, 0.4);
 }
