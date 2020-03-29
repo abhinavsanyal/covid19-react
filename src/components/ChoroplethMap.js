@@ -99,8 +99,8 @@ class ChoroplethMap extends Component {
     render() {
         return (
             <div id="cloropleth_map" style={{
-                height: "700px",
-                width: "500px",
+                height: "100vh",
+                width: "100%",
             }}></div>
         );
     }
