@@ -4,6 +4,7 @@ import d3 from 'd3';
 import IndiaJson from './India.topo.json';
 import areArraysEqual from '../utils/areArraysEqual';
 import maps from './maps'
+import jsonFinder from './india.states.json'
 
 class ChoroplethMap extends Component {
 	componentDidMount() {
@@ -14,12 +15,22 @@ class ChoroplethMap extends Component {
 	}
 
 	buildMap = () => {
-		const {data,scope,handleScopeChange,center,scale} = this.props;
+		const {data,scope,handleScopeChange,center,scale,mapType} = this.props;
+		console.log(center,scale,"Printing center and scale")
 		let dataset = {};
-		let jsonFile = maps[`${scope}`]
-		let onlyValues = data.map(function(obj) {
-			return obj[1]['active'];
-		});
+		let mapKey = jsonFinder[`${scope}`];
+		console.log(`### the map to use := ${mapKey}, ### current scope := ${scope},## data := ${data}`)
+		let jsonFile = maps[`${mapKey}`];
+		let onlyValues;
+		if(mapType==='country'){
+			 onlyValues = data.map(function(obj) {
+				return obj[1]['active'];
+			});
+		} else {
+			onlyValues = data.map(function(obj) {
+				return obj[1]['confirmed'];
+			});
+		}
 		let minValue = Math.min.apply(null, onlyValues),
 			maxValue = Math.max.apply(null, onlyValues);
 		let paletteScale = d3.scale.linear().domain([ minValue, maxValue / 2 ]).range([ '#accbff', '#ed2939' ]); // red orange #fa954c85
@@ -27,14 +38,16 @@ class ChoroplethMap extends Component {
 		data.forEach(function(item) {
 			let iso = item[0],
 				value = item[1];
-			dataset[iso] = {
+
+			dataset[iso] = mapType==='country' ?{
                 numberOfThings: value['active'],
                 confirmed:value['confirmed'],
 				active: value['active'],
 				recovered: value['recovered'],
 				deaths: value['deaths'],
 				fillColor: paletteScale(value['active'])
-			};
+			}:{ numberOfThings: value['confirmed'],
+			fillColor: paletteScale(value['confirmed'])};
 		});
 		let elem = document.getElementById('cloropleth_map');
 		elem.innerHTML = '';
@@ -55,8 +68,8 @@ class ChoroplethMap extends Component {
 					if (!data) {
 						return;
 					}
-					// tooltip content
-					return [
+
+					let popup = mapType === 'country'?[
 						'<div class="hoverinfo">',
 						'<strong>',
 						geo.properties.name + " total: " + data.confirmed,
@@ -71,7 +84,17 @@ class ChoroplethMap extends Component {
 						data.deaths,
 						'</strong>',
 						'</div>'
-					].join('');
+					]:[
+						'<div class="hoverinfo">',
+						'<strong>',
+						geo.properties.name ,
+						'</strong>',
+						'<br>Total Infected: <strong>',
+						data.numberOfThings,
+						'</strong>',
+					]
+					// tooltip content
+					return popup.join('');
 				}
 			},
 			fills: {
@@ -84,14 +107,14 @@ class ChoroplethMap extends Component {
 			data: dataset,
 			done: function(datamap) {
 				datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
-					handleScopeChange(geography.properties)
+					handleScopeChange(geography.properties[`name`],"state")
 				});
 			},
 			setProjection: function(element) {
 				var projection = d3.geo
 					.mercator()
-					.center([ 78.9629, 23.5937 ]) // always in [East Latitude, North Longitude]
-					.scale(1000)
+					.center(center) // always in [East Latitude, North Longitude]
+					.scale(scale)
 					.translate([ element.offsetWidth / 2, element.offsetHeight / 2 ]);
 
 				var path = d3.geo.path().projection(projection);
@@ -107,7 +130,7 @@ class ChoroplethMap extends Component {
 			<div
 				id="cloropleth_map"
 				style={{
-					height: '100vh',
+					height: '100%',
 					width: '100%'
 				}}
 			/>

@@ -1,3 +1,36 @@
 import India from'./India.topo.json';
-const maps = {India}
+import AP from'./andhrapradesh.json';
+import AR from'./arunachalpradesh.json';
+import AN from'./andamannicobarislands.json';
+import AS from'./assam.json';
+import BR from'./bihar.json';
+import CH from'./chhattisgarh.json';
+import DL from'./delhi.json';
+import GA from'./goa.json';
+import GJ from'./gujarat.json';
+import HR from'./haryana.json';
+import HP from'./himachalpradesh.json';
+import JK from'./jammukashmir.json';
+import JH from'./jharkhand.json';
+import KA from'./karnataka.json';
+import KL from'./kerala.json';
+import LA from'./ladakh.json';
+import MP from'./madhyapradesh.json';
+import MH from'./maharashtra.json';
+import MN from'./manipur.json';
+import ML from'./meghalaya.json';
+import MZ from'./mizoram.json';
+import NL from'./nagaland.json';
+import OR from'./odisha.json';
+import PB from'./punjab.json';
+import RJ from'./rajasthan.json';
+import SK from'./sikkim.json';
+import TR from'./tamil-nadu.json';
+import TN from'./tripura.json';
+import TS from'./telugana.json';
+import UK from'./uttarakhand.json';
+import UP from'./uttarpradesh.json';
+import WB from'./westbengal.json';
+
+const maps = {India,AP,AR,AN,AS,BR,CH,DL,GA,GJ,HR,HP,JK,JH,KA,KL,LA,MP,MH,MN,ML,MZ,NL,OR,PB,RJ,SK,TR,TN,TS,UK,UP,WB}
 export default maps;
