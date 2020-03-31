@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Datamap from 'datamaps/dist/datamaps.world.min.js';
 import d3 from 'd3';
-import IndiaJson from './India.topo.json';
 import areArraysEqual from '../utils/areArraysEqual';
 import maps from './maps'
 import jsonFinder from './india.states.json'
@@ -15,11 +14,10 @@ class ChoroplethMap extends Component {
 	}
 
 	buildMap = () => {
-		const {data,scope,handleScopeChange,center,scale,mapType} = this.props;
-		console.log(center,scale,"Printing center and scale")
+		const {data,scope,handleScopeChange,center,scale,mapType,getDataOnHover,onHoverEnd} = this.props;
 		let dataset = {};
 		let mapKey = jsonFinder[`${scope}`];
-		console.log(`### the map to use := ${mapKey}, ### current scope := ${scope},## data := ${data}`)
+		// console.log(`### the map to use := ${mapKey}, ### current scope := ${scope},## data := ${data}`)
 		let jsonFile = maps[`${mapKey}`];
 		let onlyValues;
 		if(mapType==='country'){
@@ -64,11 +62,12 @@ class ChoroplethMap extends Component {
 				borderWidth: 0.5,
 				dataJson: jsonFile,
 				popupTemplate: function(geo, data) {
-					// don't show tooltip if country don't present in dataset
+
+					// don't show toolt	ip if country don't present in dataset
 					if (!data) {
 						return;
 					}
-
+					getDataOnHover(geo.properties.name,data);
 					let popup = mapType === 'country'?[
 						'<div class="hoverinfo">',
 						'<strong>',
@@ -106,9 +105,33 @@ class ChoroplethMap extends Component {
 			},
 			data: dataset,
 			done: function(datamap) {
+				// let subUnits = Array.from(datamap.svg.selectAll('.datamaps-subunit'))
+				// subUnits[0][0].onmouseleave = function(){
+				// 	console.log("asddas")
+				//   } 
+				// console.log( subUnits[0][0].onmouseleave,"nodes")
+				// datamap.svg.selectAll('.datamaps-subunit').on('mouseleave', function(geography) {
+				// 	console.log("mouse have left",mapType)
+				// });
+				// let Map = window.document.querySelector('.datamaps-subunit')
+				// Map.addEventListener('click',function(e){
+				// 	console.log("left India")
+				// })
+				// console.log(datamap.svg.select('.datamaps-subunit') , "lets see")
+				// datamap.svg.select('.datamaps-subunit').onmouseleave = function(){console.log("sadasdsdasasdasdasdasdasd")};
+				// datamap.svg.selectAll('.datamaps-subunit').on('mouseout', function(geography) {
+				// 	console.log("dsaadds")
+				// });
+				let Map = window.document.getElementsByClassName('datamaps-subunits')
+				
+				Map[0].addEventListener('mouseleave', function(e) {
+					e.stopPropagation();
+					console.log("asddasddasadsdsa");
+					onHoverEnd();
+				},false)
 				datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
-					handleScopeChange(geography.properties[`name`],"state")
-				});
+					if(mapType === 'country') handleScopeChange(geography.properties[`name`],"state")
+				})
 			},
 			setProjection: function(element) {
 				var projection = d3.geo
@@ -131,7 +154,7 @@ class ChoroplethMap extends Component {
 				id="cloropleth_map"
 				style={{
 					height: '100%',
-					width: '100%'
+					width: '100%',
 				}}
 			/>
 		);

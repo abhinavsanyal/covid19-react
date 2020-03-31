@@ -2,11 +2,8 @@ import React from 'react';
 import { push } from 'connected-react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// import { increment, incrementAsync, decrement, decrementAsync } from '../../modules/counter';
-// import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';
 import ChoroplethMap from '../../components/ChoroplethMap';
-import stateData from './dummy/state-wise.json';
-import districtData from './dummy/district-wise.json';
+import './index.scss'
 
 const mapMeta = {
 	India: {
@@ -243,22 +240,30 @@ const mapMeta = {
 		scale: 5000
 	}
 };
-let countryInterval ;
-let stateInterval ;
+let countryInterval;
+let stateInterval;
 class Home extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			choroplethData: [],
 			scope: 'India',
+			confirmed:'',
+			active:'',
+			recovered:'',
+			deaths:'',
+			choroplethName:'India',
+			countryData:{}
 		};
 	}
 
-
-	 async getIndiaData(){
+	async getIndiaData() {
 		const res = await fetch('https://api.covid19india.org/data.json');
 		const states = await res.json();
 		const data = states.statewise;
+		const IndiaData = data[0];
+		console.log('India total',IndiaData);
+
 		let mockCovid =
 			data.length > 0 &&
 			data.map((info) => {
@@ -277,10 +282,10 @@ class Home extends React.Component {
 			choroplethData: mockCovid
 		});
 	}
-	 async getStateData(scope){
+	async getStateData(scope) {
 		const res = await fetch('https://api.covid19india.org/state_district_wise.json');
 		const states = await res.json();
- 		const data = states[`${scope}`]['districtData'];
+		const data = states[`${scope}`] ?states[`${scope}`]['districtData']:{};
 		const data_keys = Object.keys(data);
 		let mockCovid =
 			data_keys.length > 0 &&
@@ -288,7 +293,6 @@ class Home extends React.Component {
 				let datapointArray = [];
 				datapointArray[0] = info;
 				let obj = {};
-				console.log("sadasd", data[`${info}`])
 				obj.confirmed = data[`${info}`].confirmed;
 				// obj.active = info.active;
 				// obj.recovered = info.recovered;
@@ -297,7 +301,7 @@ class Home extends React.Component {
 
 				return datapointArray;
 			});
-		this.setState({
+		mockCovid &&  this.setState({
 			choroplethData: mockCovid
 		});
 	}
@@ -305,47 +309,65 @@ class Home extends React.Component {
 	componentDidMount() {
 		this.getIndiaData();
 		try {
-		 countryInterval =	setInterval(async () => {
+			countryInterval = setInterval(async () => {
 				this.getIndiaData();
 			}, 4000);
-
 		} catch (e) {
 			console.log(e);
 		}
-
 	}
 
-	handleScopeChange = (scope,mapType) => {
+	handleScopeChange = (scope, mapType) => {
 		let center = mapMeta[`${scope}`].center;
-		let scale= mapMeta[`${scope}`].scale;
+		let scale = mapMeta[`${scope}`].scale;
 		clearInterval(countryInterval);
 		this.getStateData(scope);
 		try {
 			setInterval(async () => {
 				this.getStateData(scope);
 			}, 4000);
-
 		} catch (e) {
 			console.log(e);
 		}
 
+		this.setState({ scope });
+	};
 
-		this.setState({scope});
+	setHoverData = (name,data) => {
+		console.log(`name:= ${name} , data := ${data}`)
+		this.setState({choroplethName:name})
+	};
+	whenMapIsNotHovered = () => {
+	
+		this.setState({choroplethName:this.state.scope})
 	};
 
 	render() {
 		return (
 			<React.Fragment>
-				<div>
-				{console.log()}
-					<ChoroplethMap
-						data={this.state.choroplethData}
-						scope={this.state.scope}
-						center={mapMeta[`${this.state.scope}`].center}
-						scale={mapMeta[`${this.state.scope}`].scale}
-						mapType={mapMeta[`${this.state.scope}`].mapType}
-						handleScopeChange={this.handleScopeChange}
-					/>
+				<div className="flex-container">
+					<div className="section-hero">
+						
+						
+						<div className="home-hero-left">
+						<div className="choropleth-title">
+						{this.state.choroplethName}
+						</div>
+							<ChoroplethMap
+								data={this.state.choroplethData}
+								scope={this.state.scope}
+								center={mapMeta[`${this.state.scope}`].center}
+								scale={mapMeta[`${this.state.scope}`].scale}
+								mapType={mapMeta[`${this.state.scope}`].mapType}
+								handleScopeChange={this.handleScopeChange}
+								getDataOnHover = {this.setHoverData}
+								onHoverEnd = {this.whenMapIsNotHovered}
+							
+							/>
+						</div>
+						<div className="home-hero-right" >
+						</div>
+					</div>
 				</div>
 			</React.Fragment>
 		);

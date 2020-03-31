@@ -1,0 +1,30 @@
+.flex-container {
+	.section-hero {
+		display: flex;
+		flex-wrap: wrap;
+		.home-hero-left {
+			height: 90vh;
+            flex: .5;
+            background-color:yellow;
+            padding: 30px;
+            .choropleth-title{
+                font-size: 36px;
+                line-height: 66px;
+                letter-spacing: -0.1px;
+                font-weight: 800;
+                color: #1F2B35;
+                text-transform: uppercase;
+                position: absolute;
+            }
+		}
+		.home-hero-right {
+            flex: .5;
+            background-color: lightblue
+            ;
+		}
+	}
+}
+
+.datamaps-subunits{
+    cursor: pointer;
+}
