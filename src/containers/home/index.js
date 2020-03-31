@@ -253,7 +253,7 @@ class Home extends React.Component {
 			recovered:'',
 			deaths:'',
 			choroplethName:'India',
-			countryData:{}
+		    scopeData:{}
 		};
 	}
 
@@ -262,7 +262,8 @@ class Home extends React.Component {
 		const states = await res.json();
 		const data = states.statewise;
 		const IndiaData = data[0];
-		console.log('India total',IndiaData);
+		const {active, recovered, deaths} = IndiaData;
+		this.setState({scopeData: IndiaData, active, recovered, deaths})
 
 		let mockCovid =
 			data.length > 0 &&
@@ -334,12 +335,13 @@ class Home extends React.Component {
 	};
 
 	setHoverData = (name,data) => {
-		console.log(`name:= ${name} , data := ${data}`)
-		this.setState({choroplethName:name})
+		console.log(data)
+		const {active, recovered, deaths} = data;
+		this.setState({choroplethName:name, active, recovered, deaths})
 	};
 	whenMapIsNotHovered = () => {
-	
-		this.setState({choroplethName:this.state.scope})
+		const {active, recovered, deaths} = this.state.scopeData;
+		this.setState({choroplethName:this.state.scope, active, recovered, deaths})
 	};
 
 	render() {
@@ -353,6 +355,20 @@ class Home extends React.Component {
 						<div className="choropleth-title">
 						{this.state.choroplethName}
 						</div>
+						<div className="choropleth-insights">
+						<div>
+                            {'Active Cases:'+' '+ this.state.active}
+						</div>
+						<div>
+                            { 'recovered Cases:'+' '+ this.state.recovered}
+						</div>
+						<div>
+                            {'Death Toll:'+' '+ this.state.deaths}
+						</div>
+						
+						</div>
+						
+				
 							<ChoroplethMap
 								data={this.state.choroplethData}
 								scope={this.state.scope}
