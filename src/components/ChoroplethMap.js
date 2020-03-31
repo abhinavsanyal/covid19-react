@@ -152,6 +152,7 @@ class ChoroplethMap extends Component {
 		return (
 			<div
 				id="cloropleth_map"
+				className="cloropleth_map"
 				style={{
 					height: '100%',
 					width: '100%',
