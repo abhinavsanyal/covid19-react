@@ -3,7 +3,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		.home-hero-left {
-			height: 90vh;
+			height: 95vh;
             flex: .5;
             padding: 30px;
             .choropleth-title{
@@ -14,6 +14,10 @@
                 color: #1F2B35;
                 text-transform: uppercase;
                 position: absolute;
+            }
+            .choropleth-insights{
+                position: absolute;
+                top: 25%;
             }
 		}
 		.home-hero-right {
@@ -27,3 +31,4 @@
 .datamaps-subunits{
     cursor: pointer;
 }
+

@@ -1,10 +1,27 @@
-import React from 'react'
+import React from 'react';
+import { push } from 'connected-react-router';
+import ChoroplethMap from '../../components/ChoroplethMap';
 
 
-const PaitentHome = () => (
-  <div>
-    <h1>PaitentHome Page</h1>
-  </div>
-)
 
-export default PaitentHome;
+class PatientHome extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			choroplethData: [],
+			scope: 'India',
+		};
+	}
+
+
+	render() {
+		return (
+			<React.Fragment>
+			
+			</React.Fragment>
+		);
+	}
+}
+
+
+export default PatientHome;
