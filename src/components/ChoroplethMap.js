@@ -217,12 +217,12 @@ class ChoroplethMap extends Component {
 		});
 
 		map.addPlugin('markers', Datamap.customMarkers);
-
+		console.log(center,"center")
 		var options = {
 			fillOpacity: 1,
 			popupOnHover: true,
 			popupTemplate: function(data) {
-				return "<div class='hoverinfo'>" + data.name + "</div>";
+				return "<div class='hoverinfo'>" + data.latitude + "   and the    " + data.longitude + "</div>";
 			},
 			icon: {
 			  url: testCenterIconURL,

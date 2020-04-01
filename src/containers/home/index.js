@@ -255,7 +255,8 @@ class Home extends React.Component {
 			choroplethName: 'India',
 			scopeData: {},
 			stateTotal: 0,
-			districtTotal: 0
+			districtTotal: 0,
+			showTestCenters:false
 		};
 	}
 
@@ -423,6 +424,7 @@ class Home extends React.Component {
 								handleScopeChange={this.handleScopeChange}
 								getDataOnHover={this.setHoverData}
 								onHoverEnd={this.whenMapIsNotHovered}
+								showMarkers = {this.state.showTestCenters}
 							/>
 						</div>
 						<div className="home-hero-right column" />

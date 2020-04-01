@@ -6,6 +6,10 @@
   "license": "MIT",
   "private": true,
   "homepage": "",
+  "engines": {
+    "npm": "6.13.4",
+    "node": "12.16.1"
+  },
   "keywords": [
     "corona",
     "virus",
@@ -21,8 +25,7 @@
   ],
   "scripts": {
     "deploy": "now && now alias",
-    "start": "nodemon ./server/server.js",
-    "start-react": "react-scripts start",
+    "start": "react-scripts start",
     "now-start": "serve -s ./build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
