@@ -1,34 +1,116 @@
 .flex-container {
 	.section-hero {
-		display: flex;
-		flex-wrap: wrap;
+        // display: flex;
+        // flex-direction: row;
+        // flex-wrap: wrap;
+        // width: 100%;
+      
 		.home-hero-left {
-			height: 95vh;
-            flex: .5;
-            padding: 30px;
-            .choropleth-title{
-                font-size: 36px;
-                line-height: 66px;
-                letter-spacing: -0.1px;
-                font-weight: 800;
-                color: #1F2B35;
-                text-transform: uppercase;
-                position: absolute;
-            }
-            .choropleth-insights{
-                position: absolute;
-                top: 25%;
-            }
+			// flex: .5;
+           
+            background-color: rgba(230, 234, 235,0.2);
+            position: relative;
+			.choropleth-title {
+                display: flex;
+                .title{
+                    flex: .8;
+                    justify-content: flex-start;
+                    font-size: 36px;
+                    line-height: 66px;
+                    letter-spacing: -0.1px;
+                    font-weight: 900;
+                    color: #1f2b35;
+                    text-transform: uppercase;
+                }
+                // position: absolute;
+              
+                .choropleth-back-btn {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    flex: .2 ;
+                    .btn{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding:  3px 40px 3px 40px;
+                        background-color: #fff;
+                        border-radius: 3px;
+                        
+                        
+                           .back-btn{
+                               font-size: 16px;
+                               font-weight: 700;
+                               text-transform: uppercase;
+                               color: rgb(168, 168, 168);
+                           }
+                        &:hover {
+                            color: rgba(255, 255, 255, 0.918) !important;
+                            background-color: rgb(228, 228, 228);
+                           
+                        }
+
+                        &:hover .back-btn{
+                            color: rgba(255, 255, 255, 0.918) !important;
+
+                        }
+                          
+                    }
+                    
+                }
+			}
+			.choropleth-insights {
+				position: absolute;
+				top: 25%;
+			}
+		
 		}
 		.home-hero-right {
-            flex: .5;
-            background-color: lightblue
-            ;
+			// flex: .5;
+		background-color: black;
 		}
 	}
 }
 
-.datamaps-subunits{
-    cursor: pointer;
+.datamaps-subunits {
+	cursor: pointer;
 }
+
+.row {
+    // display: flex;
+    // flex-direction: row;
+    // flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .column {
+      width: 48%;
+      height: 90vh;
+      margin: 10px;
+      min-width: 6rem !important;
+  }
+
+  .red{
+      background: rgb(231, 35, 94);
+    }
+    .blue{
+        background: rgb(56, 130, 226);
+  }
+
+  @media screen and (max-width:1200px){
+      .column{
+          width: 98%;
+      }
+  }
+
+  @media screen and (max-width:600px){
+      .column{
+          width: 100%;
+      }
+  }
 

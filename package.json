@@ -1,5 +1,5 @@
 {
-  "name": "india_fights_corona",
+  "name": "india_fights_corona_client",
   "version": "1.0.0",
   "description": "",
   "author": "Abhinava Sanyal",
@@ -14,7 +14,10 @@
     "covid19",
     "sick",
     "cough",
-    "cold"
+    "cold",
+    "india fights corona",
+    "fight corona",
+    "covid free india"
   ],
   "scripts": {
     "deploy": "now && now alias",

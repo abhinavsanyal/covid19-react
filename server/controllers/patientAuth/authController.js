@@ -19,7 +19,7 @@ module.exports = {
       } else {
         patient.isCorrectPassword(password, function(err, same) {
           if (err) {
-            res.status(500).json({
+            res.status(500).json({   
               error: 'Internal error please try again'
             })
           } else if (!same) {

@@ -3,11 +3,95 @@ import Datamap from 'datamaps/dist/datamaps.world.min.js';
 import d3 from 'd3';
 import areArraysEqual from '../utils/areArraysEqual';
 import maps from './maps'
-import jsonFinder from './india.states.json'
+import jsonFinder from './india.states.json';
+// import './datamaps.markers'
 
 class ChoroplethMap extends Component {
 	componentDidMount() {
+		this.customMarker();
+
 		this.buildMap();
+		
+		
+	}
+
+	customMarker = () =>{
+	
+			if (typeof Datamap !== 'undefined') {
+			  // Handler custom markers.
+			  Datamap.customMarkers = function (layer, data, options) {
+				var self = this,
+				  fillData = this.options.fills,
+				  svg = this.svg;
+		  
+				// Check for map data.
+				if (!data || (data && !data.slice)) {
+				  throw "Datamaps Error - markers must be an array";
+				}
+		  
+				// Build markers.
+				var markers = layer
+				  .selectAll('image.datamaps-markers')
+				  .data(data, JSON.stringify);
+		  
+				markers
+				  .enter()
+				  .append('image')
+				  .attr('class', 'datamaps-marker')
+				  .attr('xlink:href', options.icon.url)
+				  .attr('width', options.icon.width)
+				  .attr('height', options.icon.height)
+				  .attr('x', function (markerData) {
+					var latLng;
+					if (markerHasCoordinates(markerData)) {
+					  latLng = self.latLngToXY(markerData.latitude, markerData.longitude);
+					}
+					else if (markerData.centered) {
+					  latLng = self.path.centroid(svg.select('path.' + markerData.centered).data()[0]);
+					}
+					if (latLng) return (latLng[0] - (options.icon.width / 2));
+				  })
+				  .attr('y', function (markerData) {
+					var latLng;
+					if (markerHasCoordinates(markerData)) {
+					  latLng = self.latLngToXY(markerData.latitude, markerData.longitude);
+					}
+					else if (markerData.centered) {
+					  latLng = self.path.centroid(svg.select('path.' + markerData.centered).data()[0]);
+					}
+					if (latLng) return (latLng[1] - options.icon.height);
+				  })
+				  .on('mouseover', function (markerData) {
+					var $this = d3.select(this);
+					if (options.popupOnHover) {
+					  self.updatePopup($this, markerData, options, svg);
+					}
+				  })
+				  .on('mouseout', function (markerData) {
+					var $this = d3.select(this);
+					if (options.highlightOnHover) {
+					  // Reapply previous attributes.
+					  var previousAttributes = JSON.parse($this.attr('data-previousAttributes'));
+					  for (var attr in previousAttributes) {
+						$this.style(attr, previousAttributes[attr]);
+					  }
+					}
+					d3.selectAll('.datamaps-hoverover').style('display', 'none');
+				  })
+		  
+				markers.exit()
+				  .transition()
+				  .delay(options.exitDelay)
+				  .attr("height", 0)
+				  .remove();
+		  
+				// Checks if a marker has latitude and longitude provided.
+				function markerHasCoordinates(markerData) {
+				  return typeof markerData !== 'undefined' && typeof markerData.latitude !== 'undefined' && typeof markerData.longitude !== 'undefined';
+				}
+			  }
+			}
+		  
 	}
 	componentDidUpdate(prevProps, prevState) {
 		if (!areArraysEqual(prevProps.data, this.props.data)) this.buildMap();
@@ -105,28 +189,10 @@ class ChoroplethMap extends Component {
 			},
 			data: dataset,
 			done: function(datamap) {
-				// let subUnits = Array.from(datamap.svg.selectAll('.datamaps-subunit'))
-				// subUnits[0][0].onmouseleave = function(){
-				// 	console.log("asddas")
-				//   } 
-				// console.log( subUnits[0][0].onmouseleave,"nodes")
-				// datamap.svg.selectAll('.datamaps-subunit').on('mouseleave', function(geography) {
-				// 	console.log("mouse have left",mapType)
-				// });
-				// let Map = window.document.querySelector('.datamaps-subunit')
-				// Map.addEventListener('click',function(e){
-				// 	console.log("left India")
-				// })
-				// console.log(datamap.svg.select('.datamaps-subunit') , "lets see")
-				// datamap.svg.select('.datamaps-subunit').onmouseleave = function(){console.log("sadasdsdasasdasdasdasdasd")};
-				// datamap.svg.selectAll('.datamaps-subunit').on('mouseout', function(geography) {
-				// 	console.log("dsaadds")
-				// });
 				let Map = window.document.getElementsByClassName('datamaps-subunits')
 				
 				Map[0].addEventListener('mouseleave', function(e) {
 					e.stopPropagation();
-					console.log("asddasddasadsdsa");
 					onHoverEnd();
 				},false)
 				datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
@@ -147,6 +213,22 @@ class ChoroplethMap extends Component {
 		d3.select(window).on('resize', function() {
 			map.resize();
 		});
+
+		map.addPlugin('markers', Datamap.customMarkers);
+
+		var options = {
+			fillOpacity: 1,
+			popupOnHover: true,
+			icon: {
+			  url: '/path/to/icon.png',
+			  width: 20,
+			  height: 20
+			}
+		  };
+		  map.markers([
+			{name: 'All India Institute Medical Sciences, Bhopal', radius: 10, latitude: 23.2067582, longitude: 77.4601622},
+		  ], options);
+	
 	};
 	render() {
 		return (

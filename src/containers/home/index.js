@@ -3,7 +3,7 @@ import { push } from 'connected-react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ChoroplethMap from '../../components/ChoroplethMap';
-import './index.scss'
+import './index.scss';
 
 const mapMeta = {
 	India: {
@@ -61,7 +61,7 @@ const mapMeta = {
 		mapType: 'state',
 		graphObjectName: 'delhi_1997-2012_district',
 		center: [ 77, 28.5 ],
-		scale: 30000
+		scale: 240000
 	},
 	Karnataka: {
 		name: 'Karnataka',
@@ -248,12 +248,14 @@ class Home extends React.Component {
 		this.state = {
 			choroplethData: [],
 			scope: 'India',
-			confirmed:'',
-			active:'',
-			recovered:'',
-			deaths:'',
-			choroplethName:'India',
-		    scopeData:{}
+			confirmed: '',
+			active: '',
+			recovered: '',
+			deaths: '',
+			choroplethName: 'India',
+			scopeData: {},
+			stateTotal: 0,
+			districtTotal: 0
 		};
 	}
 
@@ -262,8 +264,8 @@ class Home extends React.Component {
 		const states = await res.json();
 		const data = states.statewise;
 		const IndiaData = data[0];
-		const {active, recovered, deaths} = IndiaData;
-		this.setState({scopeData: IndiaData, active, recovered, deaths})
+		const { active, recovered, deaths } = IndiaData;
+		this.setState({ scopeData: IndiaData, active, recovered, deaths });
 
 		let mockCovid =
 			data.length > 0 &&
@@ -286,7 +288,16 @@ class Home extends React.Component {
 	async getStateData(scope) {
 		const res = await fetch('https://api.covid19india.org/state_district_wise.json');
 		const states = await res.json();
-		const data = states[`${scope}`] ?states[`${scope}`]['districtData']:{};
+		const data = states[`${scope}`] ? states[`${scope}`]['districtData'] : {};
+		let total = 0;
+
+		for (let state in data) {
+			if (data.hasOwnProperty(state)) {
+				total += parseFloat(data[state].confirmed);
+			}
+		}
+		this.setState({ stateTotal: total, districtTotal: total });
+
 		const data_keys = Object.keys(data);
 		let mockCovid =
 			data_keys.length > 0 &&
@@ -302,17 +313,19 @@ class Home extends React.Component {
 
 				return datapointArray;
 			});
-		mockCovid &&  this.setState({
-			choroplethData: mockCovid
-		});
+		mockCovid &&
+			this.setState({
+				choroplethData: mockCovid
+			});
 	}
 
 	componentDidMount() {
 		this.getIndiaData();
+		clearInterval(stateInterval);
 		try {
 			countryInterval = setInterval(async () => {
 				this.getIndiaData();
-			}, 4000);
+			}, 240000);
 		} catch (e) {
 			console.log(e);
 		}
@@ -324,9 +337,9 @@ class Home extends React.Component {
 		clearInterval(countryInterval);
 		this.getStateData(scope);
 		try {
-			setInterval(async () => {
+			stateInterval = setInterval(async () => {
 				this.getStateData(scope);
-			}, 4000);
+			}, 240000);
 		} catch (e) {
 			console.log(e);
 		}
@@ -334,41 +347,73 @@ class Home extends React.Component {
 		this.setState({ scope });
 	};
 
-	setHoverData = (name,data) => {
-		console.log(data)
-		const {active, recovered, deaths} = data;
-		this.setState({choroplethName:name, active, recovered, deaths})
+	setHoverData = (name, data) => {
+		const { active, recovered, deaths, numberOfThings } = data;
+		this.setState({ choroplethName: name, active, recovered, deaths, districtTotal: numberOfThings });
 	};
 	whenMapIsNotHovered = () => {
-		const {active, recovered, deaths} = this.state.scopeData;
-		this.setState({choroplethName:this.state.scope, active, recovered, deaths})
+		const { active, recovered, deaths } = this.state.scopeData;
+		this.setState({
+			choroplethName: this.state.scope,
+			active,
+			recovered,
+			deaths,
+			districtTotal: this.state.stateTotal
+		});
+	};
+	handleBack = () => {
+		clearInterval(stateInterval);
+		this.getIndiaData();
+		this.setState({ scope: 'India', choroplethName: 'India' });
+		try {
+			countryInterval = setInterval(async () => {
+				this.getIndiaData();
+			}, 240000);
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	render() {
 		return (
 			<React.Fragment>
 				<div className="flex-container">
-					<div className="section-hero">
-						
-						
-						<div className="home-hero-left">
-						<div className="choropleth-title">
-						{this.state.choroplethName}
-						</div>
-						<div className="choropleth-insights">
-						<div>
-                            {'Active Cases:'+' '+ this.state.active}
-						</div>
-						<div>
-                            { 'recovered Cases:'+' '+ this.state.recovered}
-						</div>
-						<div>
-                            {'Death Toll:'+' '+ this.state.deaths}
-						</div>
-						
-						</div>
-						
-				
+					<div className="section-hero row">
+						<div className="home-hero-left column">
+							<div className="choropleth-title">
+								<div className="title">{this.state.choroplethName}</div>
+								{mapMeta[`${this.state.scope}`].mapType === 'state' ? (
+									<div className="choropleth-back-btn">
+										<div onClick={() => this.handleBack()} className="btn">
+											<div className="arrow-left"> </div> <div className="back-btn"> back </div>
+										</div>
+									</div>
+								) : null}
+							</div>
+							{mapMeta[`${this.state.scope}`].mapType === 'state' ? (
+								<div className="choropleth-insights">
+									<div className="data-box  data-box-red">
+										<div className="title">{'Confirmed'}</div>
+										<div className="count">{this.state.districtTotal}</div>
+									</div>
+								</div>
+							) : (
+								<div className="choropleth-insights">
+									<div className="data-box  data-box-red">
+										<div className="title">{'Active'}</div>
+										<div className="count">{this.state.active}</div>
+									</div>
+									<div className="data-box data-box-blue">
+										<div className="title">{'Recovered'}</div>
+										<div className="count">{this.state.recovered}</div>
+									</div>
+									<div className="data-box data-box-grey">
+										<div className="title">{'Deaths'}</div>
+										<div className="count">{this.state.deaths}</div>
+									</div>
+								</div>
+							)}
+
 							<ChoroplethMap
 								data={this.state.choroplethData}
 								scope={this.state.scope}
@@ -376,13 +421,11 @@ class Home extends React.Component {
 								scale={mapMeta[`${this.state.scope}`].scale}
 								mapType={mapMeta[`${this.state.scope}`].mapType}
 								handleScopeChange={this.handleScopeChange}
-								getDataOnHover = {this.setHoverData}
-								onHoverEnd = {this.whenMapIsNotHovered}
-							
+								getDataOnHover={this.setHoverData}
+								onHoverEnd={this.whenMapIsNotHovered}
 							/>
 						</div>
-						<div className="home-hero-right" >
-						</div>
+						<div className="home-hero-right column" />
 					</div>
 				</div>
 			</React.Fragment>
@@ -405,3 +448,60 @@ const mapDispatchToProps = (dispatch) =>
 	);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
+
+// <div className="section-hero row">
+// <div className="home-hero-left column">
+// <div className="choropleth-title">
+// <div className="title">{this.state.choroplethName}</div>
+// {mapMeta[`${this.state.scope}`].mapType === 'state' ? (
+// 	<div className="choropleth-back-btn">
+// 	<div onClick={() => this.handleBack()} className="btn">
+// 	<div className="arrow-left"> </div> <div className="back-btn"> back </div>
+// 	</div>
+// 	</div>
+// 	) : null}
+// 	</div>
+// 	{mapMeta[`${this.state.scope}`].mapType === 'state' ? (
+// 		<div className="choropleth-insights">
+// 		<div className="data-box  data-box-red">
+// 		<div className="title">{'Confirmed'}</div>
+// 		<div className="count">{this.state.districtTotal}</div>
+// 		</div>
+// 		</div>
+// 		) : (
+// 			<div className="choropleth-insights">
+// 			<div className="data-box  data-box-red">
+// 			<div className="title">{'Active'}</div>
+// 			<div className="count">{this.state.active}</div>
+// 			</div>
+// 			<div className="data-box data-box-blue">
+// 	<div className="title">{'Recovered'}</div>
+// 	<div className="count">{this.state.recovered}</div>
+// 	</div>
+// 	<div className="data-box data-box-grey">
+// 	<div className="title">{'Deaths'}</div>
+// 	<div className="count">{this.state.deaths}</div>
+// 	</div>
+// 	</div>
+// 	)}
+
+// 	<ChoroplethMap
+// 	data={this.state.choroplethData}
+// 	scope={this.state.scope}
+// 	center={mapMeta[`${this.state.scope}`].center}
+// 	scale={mapMeta[`${this.state.scope}`].scale}
+// 	mapType={mapMeta[`${this.state.scope}`].mapType}
+// 	handleScopeChange={this.handleScopeChange}
+// 	getDataOnHover={this.setHoverData}
+// 	onHoverEnd={this.whenMapIsNotHovered}
+// 	/>
+// 	</div>
+// 	<div className="home-hero-right column" />
+// 	</div>
+
+// 	<div className="row">
+// 		<div className="column red">
+// 		</div>
+// 		<div className="column blue">
+// 		</div>
+// 	</div>

@@ -1,10 +1,11 @@
 body {
 	margin: 0;
 	padding: 0;
-	font-family: 'Mukta','Roboto',sans-serif;
+	font-family: 'Muli','Mukta','Roboto',sans-serif;
 	font-size: 1rem;
 	line-height: 1.5;
 	background-color: #F6F8FA;
+	box-sizing: border-box;
 }
 
 .container{
@@ -78,6 +79,33 @@ body {
 	box-shadow: 0 5px 25px  rgba(92, 123, 182, 0.4);
 }
 
-.cloropleth_map {
-	padding-top: 7%; 
+
+.data-box{
+	margin: 17px 0 17px 0;
+	padding: 30px;
+	width: 7rem;
+	border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.data-box-red{
+	
+	background: linear-gradient(65deg, #FF4D79 0, #FF809F 100%);
+	box-shadow: 0 5px 15px rgba(145, 92, 182, .4);
+	color:white;
+}
+.data-box-blue{
+	
+	background: linear-gradient(to top right, #0081F6 0, #44A6FF 100%);
+	box-shadow: 0 5px 15px rgba(92, 123, 182, 0.4);
+	color:white;
+	margin: 5px 0 5px 0;
+}
+.data-box-grey{
+	background: linear-gradient(65deg, rgb(204, 204, 204) 0, rgb(235, 235, 235) 100%);
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+	color:white;
 }
