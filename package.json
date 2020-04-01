@@ -8,7 +8,8 @@
   "homepage": "",
   "engines": {
     "npm": "6.13.4",
-    "node": "12.16.1"
+    "node": "12.16.1",
+    "yarn": "1.x"
   },
   "keywords": [
     "corona",
@@ -24,9 +25,7 @@
     "covid free india"
   ],
   "scripts": {
-    "deploy": "now && now alias",
     "start": "react-scripts start",
-    "now-start": "serve -s ./build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
@@ -34,25 +33,16 @@
   },
   "devDependencies": {
     "expect": "^1.20.2",
-    "mocha": "^3.0.2",
-    "nodemon": "^1.14.3",
-    "prettier": "1.19.1",
-    "react-scripts": "2.1.8"
+    "prettier": "1.19.1"
   },
   "dependencies": {
+    "react-scripts": "2.1.8",
     "@material-ui/core": "^4.9.7",
-    "bcrypt": "^4.0.1",
-    "body-parser": "^1.19.0",
     "connected-react-router": "4.5.0",
-    "cookie-parser": "^1.4.5",
     "datamaps": "^0.5.9",
-    "express": "^4.16.2",
-    "jsonwebtoken": "^8.5.1",
     "moment": "^2.20.1",
-    "mongoose": "^5.9.6",
     "node-sass": "^4.13.1",
     "react": "16.12.0",
-    "react-breadcrumbs": "^2.1.7",
     "react-dom": "16.12.0",
     "react-redux": "5.1.2",
     "react-router": "4.4.0-beta.8",
