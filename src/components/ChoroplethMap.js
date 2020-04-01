@@ -3,13 +3,14 @@ import Datamap from 'datamaps/dist/datamaps.world.min.js';
 import d3 from 'd3';
 import areArraysEqual from '../utils/areArraysEqual';
 import maps from './maps'
-import jsonFinder from './india.states.json';
-// import './datamaps.markers'
+import jsonFinder from './india.states.topo.json';
+import testCenterIconURL from "./SVG/pin.svg"
+import testCenters from "./testCenters"
 
 class ChoroplethMap extends Component {
 	componentDidMount() {
+		
 		this.customMarker();
-
 		this.buildMap();
 		
 		
@@ -62,8 +63,8 @@ class ChoroplethMap extends Component {
 					if (latLng) return (latLng[1] - options.icon.height);
 				  })
 				  .on('mouseover', function (markerData) {
-					var $this = d3.select(this);
-					if (options.popupOnHover) {
+					  var $this = d3.select(this);
+					  if (options.popupOnHover) {
 					  self.updatePopup($this, markerData, options, svg);
 					}
 				  })
@@ -94,14 +95,16 @@ class ChoroplethMap extends Component {
 		  
 	}
 	componentDidUpdate(prevProps, prevState) {
-		if (!areArraysEqual(prevProps.data, this.props.data)) this.buildMap();
+		if (!areArraysEqual(prevProps.data, this.props.data)){
+			this.buildMap();
+			this.customMarker();
+		} 
 	}
 
 	buildMap = () => {
 		const {data,scope,handleScopeChange,center,scale,mapType,getDataOnHover,onHoverEnd} = this.props;
 		let dataset = {};
 		let mapKey = jsonFinder[`${scope}`];
-		// console.log(`### the map to use := ${mapKey}, ### current scope := ${scope},## data := ${data}`)
 		let jsonFile = maps[`${mapKey}`];
 		let onlyValues;
 		if(mapType==='country'){
@@ -146,7 +149,6 @@ class ChoroplethMap extends Component {
 				borderWidth: 0.5,
 				dataJson: jsonFile,
 				popupTemplate: function(geo, data) {
-
 					// don't show toolt	ip if country don't present in dataset
 					if (!data) {
 						return;
@@ -194,7 +196,7 @@ class ChoroplethMap extends Component {
 				Map[0].addEventListener('mouseleave', function(e) {
 					e.stopPropagation();
 					onHoverEnd();
-				},false)
+				})
 				datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
 					if(mapType === 'country') handleScopeChange(geography.properties[`name`],"state")
 				})
@@ -219,15 +221,26 @@ class ChoroplethMap extends Component {
 		var options = {
 			fillOpacity: 1,
 			popupOnHover: true,
+			popupTemplate: function(data) {
+				return "<div class='hoverinfo'>" + data.name + "</div>";
+			},
 			icon: {
-			  url: '/path/to/icon.png',
-			  width: 20,
-			  height: 20
+			  url: testCenterIconURL,
+			  width: 30,
+			  height: 30
 			}
 		  };
-		  map.markers([
-			{name: 'All India Institute Medical Sciences, Bhopal', radius: 10, latitude: 23.2067582, longitude: 77.4601622},
-		  ], options);
+		  let markersData = testCenters.map(center=>{
+			  center[`name`] = center.institution;
+			  return center;
+			})
+			
+			// .filter(marker => {
+			// 	return !(marker.latitude >= center[0] && marker.longitude <= center[1])
+			// })
+			  
+
+		  map.markers(markersData, options);
 	
 	};
 	render() {

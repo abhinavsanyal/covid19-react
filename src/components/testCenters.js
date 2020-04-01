@@ -252,7 +252,7 @@ const testCenters = [
    "place_id": "ChIJt-4pCSuygTkR_AoyzVvPXOc"
  },
  {
-   "institution": "National Institute of Virology Field Unit Bangalore",
+   "institution": "National Institute of Virology Field Unit, Bangalore",
    "latitude": 12.9373283,
    "longitude": 77.5908367,
    "place_id": "ChIJE98zi7sVrjsRPpFQz_G2-aQ"
@@ -264,7 +264,7 @@ const testCenters = [
    "place_id": "ChIJ0-ghHE6fQDcRQkybdXgHmiQ"
  },
  {
-   "institution": "Regional Medical Research Centre, Port Blair, Andaman and Nicobar",
+   "institution": "Regional Medical Research Centre, Port Blair, Andaman and Nicobar Islands",
    "latitude": 11.6346545,
    "longitude": 92.7146371,
    "place_id": "ChIJKSiUoTmUiDARDkPovkP3V_w"
@@ -300,13 +300,13 @@ const testCenters = [
    "place_id": "ChIJMd5K4T1IpTsR7W26mIquXuE"
  },
  {
-   "institution": "SP Med. College, Bikaner, Rajasthan",
+   "institution": "SP Med. College Bikaner, Rajasthan",
    "latitude": 28.0063889,
    "longitude": 73.3305142,
    "place_id": "ChIJa2Ycln_nPzkRRJiGniiBg2E"
  },
  {
-   "institution": "Shimoga Inst. of Med. Sciences, Shivamogga, Karnataka",
+   "institution": "Shimoga Inst. of Med. Sciences Shivamogga, Karnataka",
    "latitude": 13.9326526,
    "longitude": 75.5668522,
    "place_id": "ChIJ34psu9CouzsRfcYqpk4Ivsc"

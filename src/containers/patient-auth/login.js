@@ -5,25 +5,7 @@ import { Form, Input, Button } from 'semantic-ui-react';
 class PaitentLogin extends React.Component {
 	constructor(props) {
 		super(props);
-		// this.state = {
-		// 	username: '',
-		// 	password: ''
-		// };
 	}
-
-	// handleLogin = (e) => {
-	// 	e.preventDefault();
-	// 	console.log(this.state.username, this.state.password);
-	// };
-	// handleGuestLogin = (e) => {
-	// 	e.preventDefault();
-	// 	console.log(e.target.value);
-	// };
-	// handleFieldChange = (e) => {
-	// 	e.preventDefault();
-	// 	// console.log(e.target.name,e.target.value)
-	// 	this.setState({ [e.target.name]: e.target.value });
-	// };
 
 	render() {
 		return (
