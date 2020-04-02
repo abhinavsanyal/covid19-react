@@ -102,7 +102,7 @@ class ChoroplethMap extends Component {
 	}
 
 	buildMap = () => {
-		const {data,scope,handleScopeChange,center,scale,mapType,getDataOnHover,onHoverEnd} = this.props;
+		const {data,scope,handleScopeChange,center,scale,mapType,getDataOnHover,onHoverEnd,showMarkers} = this.props;
 		let dataset = {};
 		let mapKey = jsonFinder[`${scope}`];
 		let jsonFile = maps[`${mapKey}`];
@@ -240,7 +240,7 @@ class ChoroplethMap extends Component {
 			// })
 			  
 
-		  map.markers(markersData, options);
+		 if(showMarkers) map.markers(markersData, options);
 	
 	};
 	render() {
