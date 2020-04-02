@@ -2,6 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { push } from 'connected-react-router';
 import Question from './question';
 
+const totalMax = 15;
+const riskMark = 4;
+const mockQuestionData = [
+    {
+    id:1,question:"1",weight:5,},
+    {
+    id:2,question:"2",weight:5},
+    {
+    id:3,question:"3",weight:1},
+    {
+    id:4,question:"4",weight:1},
+    {
+    id:5,question:"5",weight:1},
+    {
+    id:6,question:"6",weight:1},
+    {
+    id:7,question:"7",weight:1},
+    {
+    id:8,question:"8",weight:1},
+    {
+    id:9,question:"9",weight:1},
+]
+
+// End the Test if the first twop questions are answered Yes ====> The patient needs to get tested
+
+// answers can be yes no and maybe
+
 export default (props) => {
 	const [ questions, setQuestions ] = useState([]);
 	const [ questionIndex, setQuestionIndex ] = useState({});
@@ -36,8 +63,17 @@ export default (props) => {
 		},
 		[ endTest ]
 	);
+	useEffect(
+		() => {
+			//API call karna bhai yaha pe METHOD: POST , uri:  '/api/test-results?id= <userId>
+			// If API succeeds the history.push('/patient/home')
+		},
+		[ endTest ]
+	);
 
-	useEffect(() => {}, [ score ]);
+	useEffect(() => {
+        // call scoreVerify to make sure that he hasnt already crossed the risk mark 
+    }, [ score ]);
 
 	return (
 		<React.Fragment>
