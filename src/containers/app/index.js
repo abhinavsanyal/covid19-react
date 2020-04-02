@@ -3,8 +3,8 @@ import { Route, Link } from 'react-router-dom'
 import Home from '../home'
 import PatientAuth from '../patient-auth'
 import DoctorAuth from '../doctor-auth'
-import PatientSignup from '../patient-auth/signup'
 import PatientHome from '../patient-home'
+import RiskCalculator from '../risk-calculator'
 
 const App = () => (
   <div>
@@ -13,6 +13,7 @@ const App = () => (
       <Route exact path="/doctor/auth" component={DoctorAuth} />   
       <Route exact path="/patient/auth" component={PatientAuth} />
       <Route exact path="/patient/home" component={PatientHome} />
+      <Route exact path="/patient/risk-calculator" component={RiskCalculator} />
     </main>
   </div>
 )
