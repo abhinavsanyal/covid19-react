@@ -20,23 +20,8 @@ const stateOptions = _.map(addressDefinitions.state, (state, index) => ({
 class PaitentSignup extends React.Component {
 	constructor(props) {
 		super(props);
-		// this.state = {
-		// 	username: '',
-		// 	password: '',
-		// 	confirmPass: '',
-		// };
+		
 	}
-
-	// handleSignup = (e) => {
-	// 	e.preventDefault();
-	// 	console.log(this.state.username, this.state.password, this.state.confirmPass);
-
-	// };
-	// handleFieldChange = (e) => {
-	// 	e.preventDefault();
-	// 	// console.log(e.target.name,e.target.value)
-	// 	this.setState({ [e.target.name]: e.target.value });
-	// };
 
 	render() {
 		return (
@@ -45,12 +30,12 @@ class PaitentSignup extends React.Component {
 					<div className="form-card">
 						<Form>
 							<Form.Field>
-								<label className="form-label">Username</label>
+								<label className="form-label">Email</label>
 								<input
-									id="username"
-									name="username"
+									id="email"
+									name="email"
 									required
-									placeholder="Enter Username"
+									placeholder="Enter email"
 									onChange={this.props.handleFieldChange}
 								/>
 							</Form.Field>

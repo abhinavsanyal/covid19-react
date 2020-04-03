@@ -10,7 +10,7 @@ class PaitentAuth extends React.Component {
 		super(props);
 		this.state = {
 			formType: 'login',
-			username: "",
+			email: "",
 			phone:"",
 			password: "",
 			confirmPass: "",
@@ -21,11 +21,11 @@ class PaitentAuth extends React.Component {
 
 	handleSignup = (e) => {
 		e.preventDefault();
-		const { username, province, password,phone, confirmPass } = this.state;
+		const { email, province, password,phone, confirmPass } = this.state;
 		console.log(phone,"phone");
 
-		if (username === '' )
-			this.setState({ errorMssage: "Username can't be empty" })
+		if (email === '' )
+			this.setState({ errorMssage: "email can't be empty" })
 		else if (province === "" )
 			this.setState({ errorMssage: "State / Province can't be empty" })
 		else if (phone ==="" )
@@ -41,36 +41,36 @@ class PaitentAuth extends React.Component {
 		else {
 			this.setState({ errorMssage: "" })
 			console.log("all ok")
-			const data = { username, province, phone, password }
+			const data = { email, province, phone, password }
 			axios.post('localhost:3000/api/register', data)
 				.then((req, res) => {
 					console.log(res);
 				})
 		}
-		// this.state.confirmPass && this.setState({errorMssage:"Username can't be empty"})
+		// this.state.confirmPass && this.setState({errorMssage:"email can't be empty"})
 
 
 	};
 
 	handleLogin = (e) => {
 		e.preventDefault();
-		const { username, password  } = this.state;
+		const { email, password  } = this.state;
 
-		if (username === '' )
-			this.setState({ errorMssage: "Username can't be empty" })
+		if (email === '' )
+			this.setState({ errorMssage: "email can't be empty" })
 		else if (password === "" )
 			this.setState({ errorMssage: "Password can't be empty" })
 		else {
 			this.setState({ errorMssage: "" })
 			console.log("all ok")
-			const data = { username, password }
+			const data = { email, password }
 			axios.post('localhost:3000/api/authenticate', data)
 				.then((req, res) => {
 					console.log(res);
 				})
 		}
 
-		console.log(this.state.username, this.state.password, 'Login data');
+		console.log(this.state.email, this.state.password, 'Login data');
 	};
 
 	handleGuestLogin = (e) => {

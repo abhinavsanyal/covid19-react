@@ -14,12 +14,12 @@ class PaitentLogin extends React.Component {
 					<div className="form-card">
 						<Form>
 							<Form.Field>
-								<label className="form-label">Username</label>
+								<label className="form-label">Email</label>
 								<input
-									id="username"
-									name="username"
+									id="email"
+									name="email"
 									required
-									placeholder="Enter Username"
+									placeholder="Enter email"
 									onChange={this.props.handleFieldChange}
 								/>
 							</Form.Field>
