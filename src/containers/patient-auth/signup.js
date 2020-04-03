@@ -19,8 +19,7 @@ const stateOptions = _.map(addressDefinitions.state, (state, index) => ({
 
 class PaitentSignup extends React.Component {
 	constructor(props) {
-		super(props);
-		
+		super(props);	
 	}
 
 	render() {
