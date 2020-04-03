@@ -5,6 +5,16 @@ import PatientLogin from './login';
 import PatientSignup from './signup';
 import axios from 'axios'
 
+const myApi = axios.create({
+	baseURL: 'http://localhost:4000',
+	timeout: 10000,
+	withCredentials: true,
+	headers: {
+	  'Accept': 'application/json',
+	  'Content-Type': 'application/json',
+	}
+  });
+
 class PaitentAuth extends React.Component {
 	constructor(props) {
 		super(props);
@@ -23,9 +33,12 @@ class PaitentAuth extends React.Component {
 		e.preventDefault();
 		const { email, province, password,phone, confirmPass } = this.state;
 		console.log(phone,"phone");
-
+		let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		let validEmail = re.test(String(email).toLowerCase())
 		if (email === '' )
 			this.setState({ errorMssage: "email can't be empty" })
+		else if (validEmail !== true )
+			this.setState({ errorMssage: "Enter a valid Email Id" })
 		else if (province === "" )
 			this.setState({ errorMssage: "State / Province can't be empty" })
 		else if (phone ==="" )
@@ -42,7 +55,7 @@ class PaitentAuth extends React.Component {
 			this.setState({ errorMssage: "" })
 			console.log("all ok")
 			const data = { email, province, phone, password }
-			axios.post('localhost:3000/api/register', data)
+			myApi.post( data)
 				.then((req, res) => {
 					console.log(res);
 				})
