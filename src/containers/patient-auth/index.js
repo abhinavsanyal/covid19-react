@@ -3,17 +3,16 @@ import './index.scss';
 import { Form, Input, Button } from 'semantic-ui-react';
 import PatientLogin from './login';
 import PatientSignup from './signup';
-import axios from 'axios'
+import client from '../../axios'
 
-const myApi = axios.create({
-	baseURL: 'http://localhost:4000',
-	timeout: 10000,
-	withCredentials: true,
-	headers: {
-	  'Accept': 'application/json',
-	  'Content-Type': 'application/json',
-	}
-  });
+// const myApi = axios.create({
+// 	baseURL: 'http://localhost:4000/api',
+// 	timeout: 10000,
+// 	headers: {
+// 	  'Accept': 'application/json',
+// 	  'Content-Type': 'application/json',
+// 	}
+//   });
 
 class PaitentAuth extends React.Component {
 	constructor(props) {
@@ -55,9 +54,16 @@ class PaitentAuth extends React.Component {
 			this.setState({ errorMssage: "" })
 			console.log("all ok")
 			const data = { email, province, phone, password }
-			myApi.post( data)
-				.then((req, res) => {
-					console.log(res);
+			client.post( 'patient/register', data)
+				.then(( res) => {
+					let {error,user} = res.data;
+					console.log(error,"what the fuck is this");
+					if(error){
+
+						return this.setState({ errorMssage: `User with email id ${this.state.email} already exist` })
+					} 
+					console.log('user',user)
+					this.handleLogin()
 				})
 		}
 		// this.state.confirmPass && this.setState({errorMssage:"email can't be empty"})
@@ -66,7 +72,7 @@ class PaitentAuth extends React.Component {
 	};
 
 	handleLogin = (e) => {
-		e.preventDefault();
+		e && e.preventDefault();
 		const { email, password  } = this.state;
 
 		if (email === '' )
@@ -77,9 +83,9 @@ class PaitentAuth extends React.Component {
 			this.setState({ errorMssage: "" })
 			console.log("all ok")
 			const data = { email, password }
-			axios.post('localhost:3000/api/authenticate', data)
-				.then((req, res) => {
-					console.log(res);
+			client.post('patient/authenticate', data)
+				.then((res) => {
+					console.log(res.data);
 				})
 		}
 
