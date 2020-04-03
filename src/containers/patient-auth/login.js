@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.scss';
-import { Form, Input, Button } from 'semantic-ui-react';
+import { Form, Input, Button, Message } from 'semantic-ui-react';
 
 class PaitentLogin extends React.Component {
 	constructor(props) {
@@ -14,12 +14,12 @@ class PaitentLogin extends React.Component {
 					<div className="form-card">
 						<Form>
 							<Form.Field>
-								<label className="form-label">Username</label>
+								<label className="form-label">Email</label>
 								<input
-									id="username"
-									name="username"
+									id="email"
+									name="email"
 									required
-									placeholder="Enter Username"
+									placeholder="Enter email"
 									onChange={this.props.handleFieldChange}
 								/>
 							</Form.Field>
@@ -62,6 +62,8 @@ class PaitentLogin extends React.Component {
 								Sign up{' '}
 							</span>
 						</div>
+						
+						{this.props.errorMssage && <Message color='red'>{this.props.errorMssage}</Message>}
 					</div>
 				</div>
 			</React.Fragment>
