@@ -54,6 +54,7 @@ export default (props) => {
 		const newItems = [...answerList];
 		newItems[questionIndex] = answer;
 		setAnswerList(newItems);
+		nextQuestion();
 	};
 
 	const answeredFirstTwoQuest = () => {
@@ -69,9 +70,19 @@ export default (props) => {
 
 	const nextQuestion = () => {
 		//set
-		var newIndex = questionIndex + 1;
-		newIndex < noOfQuestToAsk ? setQuestionIndex(newIndex) : submit();
+		if (answerList[questionIndex]){
+			var newIndex = questionIndex + 1;
+			newIndex < noOfQuestToAsk ? setQuestionIndex(newIndex) : submit();
+		}
 	};
+
+	const gotoQuestion = (index) => {
+		if (answerList[index]){
+			var newIndex = index;
+			if (newIndex < noOfQuestToAsk) { setQuestionIndex(newIndex) }
+		}
+
+	}
 	const prevQuestion = () => {
 		var newIndex = questionIndex - 1;
 		newIndex >= 0 ? setQuestionIndex(newIndex) : setQuestionIndex(0);
@@ -132,7 +143,7 @@ export default (props) => {
 			<div className="flex-container">
 				<div className="question-numbers"> 
 					{questions.map((quest, index)=>{
-						return <div className={questionIndex === index ? 'current-quest-number':'quest-number'}>{index+1}</div>
+						return <div onClick={()=>{gotoQuestion(index)}} className={questionIndex === index ? 'current-quest-number':'quest-number'}>{index+1}</div>
 					})}
 				</div> 
 				<div className="question-container">
