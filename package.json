@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.9.7",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "connected-react-router": "4.5.0",
     "d3-drag": "^1.2.5",
     "d3-force": "^2.0.1",
